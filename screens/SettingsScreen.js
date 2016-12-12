@@ -3,48 +3,38 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   View,
   TouchableHighlight,
+  TextInput
 } from 'react-native';
-import {
-  ExponentConfigView,
-} from '@exponent/samples';
 
 export default class SettingsScreen extends React.Component {
-  static route = {
-    navigationBar: {
-      title: 'exp.json'
-    },
-  }
 
   constructor() {
     super();
-    this.state = { text: 'Let us know what you think!' };
-  }
-
-  _onSumbit() {
-    return;
+    this.state = { text: '' };
   }
 
   render() {
     return (
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={this.props.route.getContentContainerStyle()}>
+      <ScrollView style={styles.container}>
+        <View style={styles.inner}>
+          <Text style={styles.welcomeText}>
+            React Native Feedback
+          </Text>
+          <Text style={styles.descriptionText}>
+            Let us know what you think of React Native so far! Complete this form, and modify it to send the input to dan@letshuddleup.com. Feel free to choose your own email API.
+          </Text>
+          <TextInput
+            style={styles.input}
+            multiline={true}
+            placeholder={'Let us know what you think!'}
+          />
 
-        <View>
-        <Text style={styles.welcomeText}>React Native Feedback</Text>
-        <Text style={styles.descriptionText}>Let us know what you think of React Native so far!  Complete this form, and modify it to send the input to dan@letshuddleup.com.  Feel free to choose your own email API.</Text>
-       <TextInput
-        style={{height: 300}}
-        multiline={true}
-        onChangeText={(text) => this.setState({text})}
-        value={this.state.text}
-      />
-
-      <TouchableHighlight onPress={this._onSumbit}><Text style={{fontSize: 28}}>Submit!</Text></TouchableHighlight>
-       </View>
+          <TouchableHighlight style={styles.touchable}>
+            <Text style={styles.submitText}>Submit!</Text>
+          </TouchableHighlight>
+        </View>
 
       </ScrollView>
     );
@@ -53,13 +43,24 @@ export default class SettingsScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1
+  },
+  inner: {
     flex: 1,
+    alignItems: 'center',
+  },
+  input: {
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 7,
+    margin: 20,
+    height: 200
   },
    descriptionText: {
     fontSize: 14,
     color: 'rgba(67,100,109, 1)',
     lineHeight: 15,
-    textAlign: 'left',
+    textAlign: 'center',
     paddingTop: 10,
   },
   welcomeText: {
@@ -69,4 +70,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingTop: 55,
   },
+  touchable: {
+    paddingVertical: 10,
+    paddingHorizontal: 25,
+    borderRadius: 20,
+    backgroundColor: 'black'
+  },
+  submitText: {
+    color: 'white',
+    fontSize: 20
+  }
 });
