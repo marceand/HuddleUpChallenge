@@ -33,7 +33,7 @@ export default class LinksScreen extends React.Component {
         contentContainerStyle={this.props.route.getContentContainerStyle()}>
       <View>
         <Text style={styles.welcomeText}>Nutrition Info ListView</Text>
-        <Text style={styles.descriptionText}>On this screen you'll use the ListView component and the Nutritionx API (https://www.nutritionix.com/business/api).</Text>
+        <Text style={styles.descriptionText}>On this screen you'll use the ListView component and the Nutritionix API (https://www.nutritionix.com/business/api).</Text>
         <Text style={styles.descriptionText}> 
         Implement a ListView that displays the nutrition information for at least 51 items on the menu of your favorite fast food restaurant.  Feel free to add styling, embellishments, or any other features you'd like!</Text>
       </View>
