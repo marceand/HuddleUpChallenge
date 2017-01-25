@@ -1,0 +1,45 @@
+exports[`test renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "flex": 1,
+    }
+  }>
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+    style={
+      Object {
+        "fontSize": 16,
+        "fontWeight": "bold",
+        "marginTop": 10,
+        "textAlign": "center",
+      }
+    }>
+    A stunning image
+  </Text>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+      }
+    }>
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Object {
+          "alignItems": "center",
+          "fontSize": 16,
+          "fontWeight": "bold",
+          "marginTop": 20,
+          "textAlign": "center",
+        }
+      }>
+      Loading movies...
+    </Text>
+  </View>
+</View>
+`;
