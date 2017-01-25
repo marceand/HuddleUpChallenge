@@ -11,30 +11,80 @@ import {
 } from 'react-native';
 
 import { MonoText } from '../components/StyledText';
+import imageStyle from './styles/ImageStyle';
+var imageServiceApi = require("../components/apiservice/ImageApiService");
 
 export default class HomeScreen extends React.Component {
   static route = {
     navigationBar: {
-      visible: false,
+      visible: true,
+      title: 'Image',
+      tintColor:'#FFFFFF',
+      backgroundColor: '#2980b9',
     },
   }
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcomeText}>Welcome to HuddleUp Challenge!</Text>
-        <Text style={styles.descriptionText}>You have three tasks to make this into a functional app. </Text>
-        <Text style={styles.descriptionText}> 
-        Below you'll see a static image.  On this screen you'll use the Pixabay API (www.pixabay.com) to load a random image whenever you return to this tab.</Text>
-      <View style={styles.pixabayImage}>
-      <Image
-          style={{width: 320, height: 240, marginTop: 20, alignItems: 'center'}}
-          source={{uri: 'https://cdn.pixabay.com/photo/2015/12/13/16/02/ios-1091302_640.jpg'}}
-        />
-        </View>
-      </View>
-    );
+  constructor(props) {
+      super(props);
+      this.state = {imageData: null};
+    }
+
+  componentDidMount(){
+    this.getImagesUri();
   }
+
+  render() {
+    return(
+        <View style={imageStyle.container}>
+          <Text style={imageStyle.title}>
+            A stunning image
+          </Text>
+
+          <View style={imageStyle.imageContainer}>
+
+            {!this.state.imageData && (<Text style={imageStyle.loading}>Loading movies...</Text>)}
+
+            {this.state.imageData && <View>
+              <Image
+              style={imageStyle.image}
+              source={{uri: this.state.imageData.webformatURL}}/>
+              <Text style={imageStyle.imageTextContainer}>
+                <Text style={imageStyle.imageLikeText}>Like: </Text>
+                <Text>{this.state.imageData.likes} </Text>
+                <Text style={imageStyle.imageViewText}>  View: </Text>
+                <Text>{this.state.imageData.views} </Text>
+              </Text>
+             </View>}
+
+          </View>
+        </View>
+
+      );
+    }
+
+    componentWillReceiveProps(nextProps){
+      this.reloadImage(nextProps.isFocused);
+    }
+
+    reloadImage(isFocused){
+      if(isFocused){
+        this.resetImageData(null);
+        this.getImagesUri();
+      }
+    }
+
+    getImagesUri(){
+        imageServiceApi.fetchImageData().then((responseData) => {
+            this.resetImageData(responseData.hits[0]);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+    }
+
+    resetImageData(data){
+      this.setState({ imageData: data});
+    }
 
   _maybeRenderDevelopmentModeWarning() {
     if (__DEV__) {
@@ -106,25 +156,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.05)',
     borderRadius: 3,
     paddingHorizontal: 4,
-  },
-  descriptionText: {
-    fontSize: 14,
-    color: 'rgba(67,100,109, 1)',
-    lineHeight: 15,
-    textAlign: 'left',
-    paddingTop: 10,
-  },
-  welcomeText: {
-    fontSize: 17,
-    color: 'rgba(67,100,109, 1)',
-    lineHeight: 23,
-    textAlign: 'center',
-    paddingTop: 55,
-  },
-  pixabayImage: {
-    flex: 1,
-    alignItems: 'center',
-    flexDirection: 'row',
   },
   tabBarInfoContainer: {
     position: 'absolute',
