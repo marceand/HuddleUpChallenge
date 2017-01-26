@@ -5,6 +5,9 @@ import {
   Text,
   View,
   ListView,
+  TextInput,
+  Button,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {
   ExponentLinksView,
@@ -13,38 +16,54 @@ import {
 export default class LinksScreen extends React.Component {
   static route = {
     navigationBar: {
-      title: 'Links',
+      title: 'Nutrition',
+      visible: true,
+      title: 'Image',
+      tintColor:'#FFFFFF',
+      backgroundColor: '#2980b9',
     },
   }
 
   constructor() {
     super();
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    this.state = {
-      dataSource: ds.cloneWithRows(['McCafe Mocha, Large - calories: 500',
-                                    'McCafe Hot Chocolate, Small - calories: 360',
-                                    'Etc.']),
-    };
+    this.state = {userSearch: null,
+                  dataSource: ds.cloneWithRows([])};
   }
   render() {
     return (
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={this.props.route.getContentContainerStyle()}>
-      <View>
-        <Text style={styles.welcomeText}>Nutrition Info ListView</Text>
-        <Text style={styles.descriptionText}>On this screen you'll use the ListView component and the Nutritionix API (https://www.nutritionix.com/business/api).</Text>
-        <Text style={styles.descriptionText}>
-        Implement a ListView that displays the nutrition information for at least 51 items on the menu of your favorite fast food restaurant.  Feel free to add styling, embellishments, or any other features you'd like!</Text>
-      </View>
-      <Text style={styles.welcomeText}>McDonalds!</Text>
-        <ListView
-        dataSource={this.state.dataSource}
-        renderRow={(rowData) => <Text>{rowData}</Text>}
-      />
 
-      </ScrollView>
+      <KeyboardAvoidingView behavior="padding">
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Enter your fast food restaurant"
+              onChangeText={(searchText) => this.setState({userSearch:searchText})}
+            />
+            <Button
+              style={styles.findButton}
+              onPress={this.onPressFindButton.bind(this)}
+              title="Find"
+              color="#3498db"
+            />
+            <ListView
+              dataSource={this.state.dataSource}
+              renderRow={(rowData) => <Text>{rowData}</Text>}
+            />
+          </View>
+        </KeyboardAvoidingView>
     );
+  }
+
+  onPressFindButton(event){
+      if(this.state.userSearch){
+        this.setState({ userSearch: this.state.userSearch+" is searched"});
+
+        this.setState({dataSource:
+          this.state.dataSource.cloneWithRows(
+            ['John', 'Joel', 'James', 'Jimmy',
+            'Jackson', 'Jillian', 'Julie', 'Devin'])});
+      }
   }
 
 }
@@ -67,5 +86,11 @@ const styles = StyleSheet.create({
     lineHeight: 23,
     textAlign: 'center',
     paddingTop: 55,
+  },
+  searchContainer: {
+    margin: 16,
+  },
+  textInput: {
+    height: 40,
   },
 });
