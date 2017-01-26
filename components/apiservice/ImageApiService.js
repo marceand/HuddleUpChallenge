@@ -1,5 +1,5 @@
 var PIXABAY_URL = 'https://pixabay.com/api/';
-var API_KEY = '4302575-97f93ef58355463ad6edb23bf';
+var API_KEY = '';
 var category = ['fashion',
                 'nature',
                 'backgrounds',
