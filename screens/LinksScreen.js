@@ -5,48 +5,117 @@ import {
   Text,
   View,
   ListView,
+  TextInput,
+  Button,
+  KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import {
   ExponentLinksView,
 } from '@exponent/samples';
 
+import BrandItem from "../components/viewmodel/BrandItem";
+var nutritionixApiService= require("../components/apiservice/NutritionixApiService");
+
 export default class LinksScreen extends React.Component {
   static route = {
     navigationBar: {
-      title: 'Links',
+      title: 'Nutrition Fact',
+      visible: true,
+      title: 'Image',
+      tintColor:'#FFFFFF',
+      backgroundColor: '#2980b9',
     },
   }
 
   constructor() {
     super();
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    this.state = {
-      dataSource: ds.cloneWithRows(['McCafe Mocha, Large - calories: 500',
-                                    'McCafe Hot Chocolate, Small - calories: 360',
-                                    'Etc.']),
-    };
+    this.state = { headingText: "Search for items of your favorite fast food restaurant",
+                  userSearch: null,
+                  dataSource: ds.cloneWithRows([])};
   }
   render() {
     return (
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={this.props.route.getContentContainerStyle()}>
-      <View>
-        <Text style={styles.welcomeText}>Nutrition Info ListView</Text>
-        <Text style={styles.descriptionText}>On this screen you'll use the ListView component and the Nutritionix API (https://www.nutritionix.com/business/api).</Text>
-        <Text style={styles.descriptionText}>
-        Implement a ListView that displays the nutrition information for at least 51 items on the menu of your favorite fast food restaurant.  Feel free to add styling, embellishments, or any other features you'd like!</Text>
-      </View>
-      <Text style={styles.welcomeText}>McDonalds!</Text>
-        <ListView
-        dataSource={this.state.dataSource}
-        renderRow={(rowData) => <Text>{rowData}</Text>}
-      />
 
-      </ScrollView>
+      <KeyboardAvoidingView behavior="padding">
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Enter your fast food restaurant"
+              onChangeText={(searchText) => this.setState({userSearch:searchText})}
+            />
+            <Button
+              onPress={this.onPressFindButton.bind(this)}
+              title="Find"
+              color="#3498db"
+            />
+            <Text style={styles.headingText}>
+              {this.state.headingText}
+            </Text>
+            <ListView
+              style={styles.listView}
+              dataSource={this.state.dataSource}
+              enableEmptySections={true}
+              renderRow={this.renderRow}
+              renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+            />
+          </View>
+        </KeyboardAvoidingView>
     );
   }
 
+  onPressFindButton(event){
+      if(this.state.userSearch){
+        this.changeHeaderText("searching....");
+        this.setListViewToEmpty();
+        this.searchItemsForGivenBrandName(this.state.userSearch);
+      }else {
+        Alert.alert("Enter name of your fast food restaurant");
+      }
+  }
+
+  renderRow(rowData){
+    return <BrandItem item_name = {rowData.fields.item_name}
+                      calories = {rowData.fields.nf_calories}
+                      total_fat = {rowData.fields.nf_total_fat}/>;
+  }
+
+  searchItemsForGivenBrandName(search){
+    nutritionixApiService.fetchNutritionData(search).then((nutritionData) => {
+        this.resetListData(nutritionData.hits);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  resetListData(itemData){
+    if(itemData.length > 0){
+      this.showResultHeadingText();
+      this.setState({dataSource:this.state.dataSource.cloneWithRows(
+        itemData
+      )});
+    }else {
+      this.showNoResultHeadingText();
+    }
+  }
+
+  showResultHeadingText(){
+    this.changeHeaderText(this.state.userSearch + ": Nutrition Fact");
+  }
+
+  showNoResultHeadingText(){
+    this.changeHeaderText("No result found");
+  }
+
+  changeHeaderText(message){
+      this.setState({headingText: message});
+  }
+
+  setListViewToEmpty(){
+    this.setState({dataSource:this.state.dataSource.cloneWithRows([])});
+  }
 }
 
 const styles = StyleSheet.create({
@@ -67,5 +136,26 @@ const styles = StyleSheet.create({
     lineHeight: 23,
     textAlign: 'center',
     paddingTop: 55,
+  },
+  searchContainer: {
+    margin: 16,
+  },
+  textInput: {
+    height: 40,
+  },
+  listView: {
+    marginTop: 10,
+  },
+  headingText: {
+    textAlign: 'center',
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginTop: 12,
+  },
+  separator: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#8E8E8E',
+    marginTop: 10,
   },
 });
