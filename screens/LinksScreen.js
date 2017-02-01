@@ -17,12 +17,11 @@ import {
 import BrandItem from "../components/viewmodel/BrandItem";
 var nutritionixApiService= require("../components/apiservice/NutritionixApiService");
 
+
 export default class LinksScreen extends React.Component {
   static route = {
     navigationBar: {
-      title: 'Nutrition Fact',
-      visible: true,
-      title: 'Image',
+      title: 'Nutrition',
       tintColor:'#FFFFFF',
       backgroundColor: '#2980b9',
     },
@@ -67,7 +66,7 @@ export default class LinksScreen extends React.Component {
 
   onPressFindButton(event){
       if(this.state.userSearch){
-        this.changeHeaderText("searching....");
+        this.changeHeadingText("searching....");
         this.setListViewToEmpty();
         this.searchItemsForGivenBrandName(this.state.userSearch);
       }else {
@@ -102,14 +101,14 @@ export default class LinksScreen extends React.Component {
   }
 
   showResultHeadingText(){
-    this.changeHeaderText(this.state.userSearch + ": Nutrition Fact");
+    this.changeHeadingText(this.state.userSearch + ": Nutrition Fact");
   }
 
   showNoResultHeadingText(){
-    this.changeHeaderText("No result found");
+    this.changeHeadingText("No result found");
   }
 
-  changeHeaderText(message){
+  changeHeadingText(message){
       this.setState({headingText: message});
   }
 

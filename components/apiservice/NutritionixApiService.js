@@ -1,7 +1,7 @@
 
 var APPLICATION_ID = "";
 var APPLICATION_KEY = "";
-var NUTRITIONIX_URL = "https://api.nutritionix.com/v1_1/search/";
+var NUTRITIONIX_URL = "";
 var LIMIT = "?results=0:50";
 var FIELDS = "&fields=item_name,brand_name,nf_calories,nf_total_fat";
 module.exports = {

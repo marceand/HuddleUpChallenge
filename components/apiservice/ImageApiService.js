@@ -1,4 +1,4 @@
-var PIXABAY_URL = 'https://pixabay.com/api/';
+var PIXABAY_URL = '';
 var API_KEY = '';
 var category = ['fashion',
                 'nature',
