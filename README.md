@@ -18,4 +18,4 @@ Thank you for your interest in working for HuddleUp!  We invite you to clone thi
 
 ![Alt text](/screenshots/reactnutrition.png?raw=true "nutrition")
 
-![Alt text](/images/feedback.png?raw=true "feedback")
+![Alt text](/images/reactfeedback.png?raw=true "feedback")
